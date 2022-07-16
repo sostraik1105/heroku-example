@@ -6,6 +6,7 @@ const { Comment } = require("../models/comment.model");
 // Utils
 const { catchAsync } = require("../utils/catchAsync.util");
 const { AppError } = require("../utils/appError.util");
+const { Email } = require("../utils/email.util");
 
 const getAllPosts = catchAsync(async (req, res, next) => {
   // Include user (post's author)
@@ -38,6 +39,9 @@ const createPost = catchAsync(async (req, res, next) => {
     content,
     userId: sessionUser.id,
   });
+
+  // Send mail when post has been created
+  await new Email(sessionUser.email).sendNewPost(content, title);
 
   res.status(201).json({
     status: "success",

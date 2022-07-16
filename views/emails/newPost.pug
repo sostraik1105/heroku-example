@@ -1,0 +1,9 @@
+extends base 
+
+block emailContent 
+    div 
+        p A new post has be created with content:
+
+        div(class='post-card') 
+            h3(class='post-card__title') #{title}
+            p(class='post-card__content') #{content}
