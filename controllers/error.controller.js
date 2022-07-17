@@ -36,6 +36,10 @@ const globalErrorHandler = (err, req, res, next) => {
     return new AppError("invalid session, please login again", 401);
   };
 
+  const handleImgExceedError = () => {
+    return new AppError("You exceeded the number of images allowed (3)", 400);
+  };
+
   if (process.env.NODE_ENV === "development") {
     sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === "production") {
@@ -48,8 +52,8 @@ const globalErrorHandler = (err, req, res, next) => {
       error = handleJWTExpiredError();
     } else if (err.name === "JsonWebTokenError") {
       error = handleJWTError();
+    } else if (err.code === "LIMIT_UNEXPECTED_FILE") {
     }
-
     sendErrorProd(error, req, res);
   }
 };
